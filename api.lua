@@ -487,3 +487,5 @@ function C4( c4 )
     end
     return self
 end
+
+print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.3.2025" )
