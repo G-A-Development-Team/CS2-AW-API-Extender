@@ -33,7 +33,7 @@ function player( ply )
     
     function self:Health() -- Integer
         if not ply then return nil end
-        if not ply:IsAlive() then return 0 end
+        if not self:Alive() then return 0 end
         return ply:GetHealth()
     end
 
@@ -203,6 +203,7 @@ function player( ply )
     function self:SteamID32() -- Int
         if not ply then return nil end
         local cont = self:Controller()
+        if not cont then return nil end
         return cont:GetFieldInt( "m_steamID" )
     end
 
@@ -222,6 +223,7 @@ function player( ply )
     function self:SteamID() -- String
         if not ply then return nil end
         local steam32_num = self:SteamID32()
+        if not steam32_nul then return nil end
         local y = steam32_num % 2
         local z = math.floor(steam32_num / 2)
         return "STEAM_0:" .. y .. ":" .. z
@@ -437,6 +439,7 @@ function Game()
         ["maps/de_train.vpk"]  = 1750,
         ["maps/de_dust2.vpk"]  = 2456
     }
+
     return self
 end
 
@@ -514,4 +517,55 @@ function C4( c4 )
     return self
 end
 
-print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.5.2025)" )
+ScrW, ScrH = draw.GetScreenSize()
+
+function ScaleToScreen( val )
+    local baseW, baseH = 1920, 1080
+    local scaleW = ScrW / baseW
+    local scaleH = ScrH / baseH
+
+    -- Average both to maintain aspect ratio
+    local scale = (scaleW + scaleH) / 2
+
+    return val * scale
+end
+
+function math.clamp( x, a, b )
+    if x < a then return a end
+    if x > b then return b end
+    return x
+end
+
+function Color( table )
+    return table[1], table[2], table[3], table[4] or 255
+end
+
+base64 = {}
+function base64.decode(data)
+    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    data = data:gsub('%s','')
+    data = data:gsub('[^'..b..'=]','')
+    local bytes = {}
+    local pad = 0
+    for i=1,#data,4 do
+        local c1 = data:sub(i,i)
+        local c2 = data:sub(i+1,i+1)
+        local c3 = data:sub(i+2,i+2)
+        local c4 = data:sub(i+3,i+3)
+        if c3 == '=' then pad = pad + 1 end
+        if c4 == '=' then pad = pad + 1 end
+        local n = (b:find(c1,1,true)-1) * 262144
+                + (b:find(c2,1,true)-1) * 4096
+                + ((c3=='=') and 0 or (b:find(c3,1,true)-1) * 64)
+                + ((c4=='=') and 0 or (b:find(c4,1,true)-1))
+        local b1 = math.floor(n / 65536) % 256
+        local b2 = math.floor(n / 256) % 256
+        local b3 = n % 256
+        table.insert(bytes, string.char(b1))
+        if c3 ~= '=' then table.insert(bytes, string.char(b2)) end
+        if c4 ~= '=' then table.insert(bytes, string.char(b3)) end
+    end
+    return table.concat(bytes)
+end
+
+print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.6.2025)" )
