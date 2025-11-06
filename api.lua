@@ -200,28 +200,28 @@ function player( ply )
 
     local STEAMID64_BASE = 76561197960265728
 
-    function self:SteamID32() -- String
+    function self:SteamID32() -- Int
         if not ply then return nil end
         local cont = self:Controller()
-        return cont:GetFieldBool( "m_steamID" )
+        return cont:GetFieldInt( "m_steamID" )
     end
 
     function self:SteamID64() -- String
         if not ply then return nil end
-        local steamID32 = self:SteamID32()
+        local steam32_num = self:SteamID32()
         local steam64 = STEAMID64_BASE + steam32_num
         return tostring(steam64)
     end
 
     function self:SteamID3()
         if not ply then return nil end
-        local steamID32 = self:SteamID32()
+        local steam32_num = self:SteamID32()
         return "[U:1:" .. steam32_num .. "]"
     end
 
     function self:SteamID() -- String
         if not ply then return nil end
-        local steamID32 = self:SteamID32()
+        local steam32_num = self:SteamID32()
         local y = steam32_num % 2
         local z = math.floor(steam32_num / 2)
         return "STEAM_0:" .. y .. ":" .. z
