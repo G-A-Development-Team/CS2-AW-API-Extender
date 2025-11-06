@@ -223,7 +223,7 @@ function player( ply )
     function self:SteamID() -- String
         if not ply then return nil end
         local steam32_num = self:SteamID32()
-        if not steam32_nul then return nil end
+        if not steam32_num then return nil end
         local y = steam32_num % 2
         local z = math.floor(steam32_num / 2)
         return "STEAM_0:" .. y .. ":" .. z
