@@ -242,6 +242,9 @@ function player( ply )
 
     function self:Controller()
         local players = GetPlayerControllers()
+        if #players == 1 then
+            return players[1]
+        end
         for id, play in pairs( players ) do
             local pawn = play:GetFieldEntity( "m_hPlayerPawn" )
             if ply:GetIndex() == pawn:GetIndex() then return play end
@@ -488,4 +491,4 @@ function C4( c4 )
     return self
 end
 
-print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.5.2025)" )
+print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.3.2025)" )
