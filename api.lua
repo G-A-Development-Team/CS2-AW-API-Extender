@@ -418,6 +418,25 @@ function Game()
         return nil
     end
 
+    self.bomb_radius_default = 2284
+
+    self.bomb_radius_maplist = {
+        ["maps/de_ancient.vpk"]  = 2284,
+        ["maps/de_anubis.vpk"]   = 1600,
+        ["maps/de_assembly.vpk"] = 500 * 3.5,
+        ["maps/de_inferno.vpk"]  = 2100,
+        ["maps/de_mills.vpk"]    = 500 * 3.5,
+        ["maps/de_mirage.vpk"]   = 2284,
+        ["maps/de_nuke.vpk"]     = 2284,
+        ["maps/de_overpass.vpk"] = 2284,
+        ["maps/de_thera.vpk"]    = 500 * 3.5,
+        ["maps/de_vertigo.vpk"]  = 1750,
+        ["maps/de_golden.vpk"]  = 1750,
+        ["maps/de_rooftop.vpk"]  = 1750,
+        ["maps/de_palacio.vpk"]  = 1991,
+        ["maps/de_train.vpk"]  = 1750,
+        ["maps/de_dust2.vpk"]  = 2456
+    }
     return self
 end
 
