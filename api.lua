@@ -261,7 +261,7 @@ function player( ply )
 
     function self:Defuser() -- Boolean
         if not ply then return nil end
-        if self:TeamNumber() ~= 3 then return false end
+        --if self:TeamNumber() ~= 3 then return false end
         local cont = self:Controller()
         return cont:GetFieldBool( "m_bPawnHasDefuser" )
     end
@@ -517,6 +517,15 @@ function C4( c4 )
     return self
 end
 
+-- Math Functions 
+function math.clamp( x, a, b )
+    if x < a then return a end
+    if x > b then return b end
+    return x
+end
+
+-- Drawing Functions
+
 ScrW, ScrH = draw.GetScreenSize()
 
 function ScaleToScreen( val )
@@ -530,17 +539,23 @@ function ScaleToScreen( val )
     return val * scale
 end
 
-function math.clamp( x, a, b )
-    if x < a then return a end
-    if x > b then return b end
-    return x
-end
-
 function Color( table )
     return table[1], table[2], table[3], table[4] or 255
 end
 
+
+-- Gui Functions
+img = {}
+function img.SVGTexture( url )
+    local svgData = http.Get( url )
+
+    local imgRGBA, imgWidth, imgHeight = common.RasterizeSVG( svgData )
+
+    return draw.CreateTexture( imgRGBA, imgWidth, imgHeight )
+end
+
 base64 = {}
+
 function base64.decode(data)
     local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     data = data:gsub('%s','')
@@ -568,4 +583,42 @@ function base64.decode(data)
     return table.concat(bytes)
 end
 
-print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.6.2025)" )
+function base64.encode(data)
+    local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    local bytes = { data:byte(1, #data) }
+    local result = {}
+    local pad = ""
+
+    for i = 1, #bytes, 3 do
+        local b1 = bytes[i]
+        local b2 = bytes[i + 1]
+        local b3 = bytes[i + 2]
+
+        local n = (b1 or 0) * 65536 + (b2 or 0) * 256 + (b3 or 0)
+
+        local c1 = math.floor(n / 262144) % 64 + 1
+        local c2 = math.floor(n / 4096) % 64 + 1
+        local c3 = math.floor(n / 64) % 64 + 1
+        local c4 = n % 64 + 1
+
+        if not b2 then
+            c3, c4 = 65, 65
+            pad = "=="
+        elseif not b3 then
+            c4 = 65
+            pad = "="
+        else
+            pad = ""
+        end
+
+        table.insert(result, b:sub(c1, c1))
+        table.insert(result, b:sub(c2, c2))
+        if b2 then table.insert(result, b:sub(c3, c3)) else table.insert(result, "=") end
+        if b3 then table.insert(result, b:sub(c4, c4)) else table.insert(result, "=") end
+    end
+
+    return table.concat(result)
+end
+
+
+print( "API Extender - Dev - Made By: Carter Poe & Agentsix1 (11.6.2025) Rev 3" )
