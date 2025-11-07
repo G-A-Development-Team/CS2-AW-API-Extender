@@ -44,6 +44,7 @@ function player( ply )
     end
 
     function self:TeamNumber() -- Integer
+        if not ply then return nil end
         return ply:GetTeamNumber()
     end
 
@@ -56,6 +57,7 @@ function player( ply )
     end
 
     function self:TeamName() -- String
+        if not ply then return "Unassigned" end
         local teamnum = ply:GetTeamNumber()
         if teamnum == 2 then return "Terrorists" end
         if teamnum == 3 then return "Counter-Terrorists" end
